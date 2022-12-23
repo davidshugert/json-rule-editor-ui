@@ -137,7 +137,7 @@ class HomeContainer extends Component {
       return <div className="home-container">
         <div className="single-panel-container">
         { (fileExist || uploadError) && <Notification body={message.body} heading={message.heading} type={message.type} /> }
-          <TitlePanel title={title} titleClass="fa fa-cloud-upload">
+          {/* <TitlePanel title={title} titleClass="fa fa-cloud-upload">
             <div className="upload-panel">
               <div className={`drop-section ${appctx.background}`} onDrop={this.drop} onDragOver={this.allowDrop}>
                   <div><label htmlFor="uploadFile">Choose Ruleset directory<input id="uploadFile" type="file" onChange={this.chooseDirectory} webkitdirectory="true" multiple/></label> or Drop Files</div>
@@ -147,8 +147,9 @@ class HomeContainer extends Component {
             <div className="btn-group">
               <Button label={"Upload"} onConfirm={this.handleUpload} classname="primary-btn" type="button" />
               {!this.props.loggedIn && <Button label={"Create"} onConfirm={() => this.navigate('./create-ruleset')} classname="primary-btn" type="button" disabled={this.state.files.length > 0} />}
-            </div>
-          </TitlePanel>
+            </div> 
+          </TitlePanel> */}
+            <div> Select one of the predefined rulesets</div>
         </div>
         {!this.props.loggedIn && <div className='footer-container home-page'>
            <FooterLinks links={footerLinks} />
