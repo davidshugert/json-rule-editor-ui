@@ -44,6 +44,21 @@ function formatDate(date) {
   );
 }
 
+const generatePayout = (facts, outcomes)=>{
+  console.log({facts, outcomes})
+  let sumBonus = 0;
+  return `
+  Drives Payout: ${formatter.format(facts.payoutSum)}
+  Bonuses: 
+  ${outcomes.map(bonus =>{
+    const bon = bonus?.params?.bonus || 0;
+    sumBonus += bon;
+    return `
+    - ${bonus.type} amount: ${formatter.format(bon)}`
+  })}
+  Total Payout: ${formatter.format(sumBonus+facts.payoutSum)}
+  `
+}
 export default {
   name: "Car",
   attributes: [
@@ -76,9 +91,9 @@ export default {
         ],
       },
       event: {
-        type: "Weekly-Trip-Goal",
+        type: "Weekly-Trip-Goal-Bonus",
         params: {
-          weeklyGoal: "true",
+          bonus: 5,
         },
       },
     },
@@ -98,9 +113,9 @@ export default {
         ],
       },
       event: {
-        type: "satisfying-rating",
+        type: "Satisfying-Rating-Bonus",
         params: {
-          satisfyingRating: "true",
+          bonus: 3,
         },
       },
     },
@@ -140,7 +155,9 @@ export default {
       },
       event: {
         type: "Weekly-Cash-Bonus",
-        params: {},
+        params: {
+          bonus: 15
+        },
       },
     },
     {
@@ -154,8 +171,10 @@ export default {
         ],
       },
       event: {
-        type: "high-rating-award",
-        params: {},
+        type: "High-Rating-Bonus",
+        params: {
+          bonus:10
+        },
       },
     },
   ],
@@ -254,16 +273,20 @@ export default {
           driverId: 1,
         },
       ],
+      generatePayout,
       generateFacts: (data) => {
         const ratings = data.map((d) => Number(d.rating));
+        const prices = data.map((d) => Number(d.price.slice(1)));
         const avgRating =
           ratings.reduce((acc, c) => acc + c, 0) / ratings.length;
+        const payoutSum = prices.reduce((partialSum, a) => partialSum + a, 0);
 
         return {
           DrivesPerWeek: data.length,
           AverageRating: avgRating,
           State: "Arizona",
           AccountAge: 7,
+          payoutSum
         };
       },
     },
@@ -361,16 +384,20 @@ export default {
           driverId: 2,
         },
       ],
+      generatePayout,
       generateFacts: (data) => {
         const ratings = data.map((d) => Number(d.rating));
+        const prices = data.map((d) => Number(d.price));
         const avgRating =
           ratings.reduce((acc, c) => acc + c, 0) / ratings.length;
+        const payoutSum = prices.reduce((partialSum, a) => partialSum + a, 0);
 
         return {
           DrivesPerWeek: data.length,
           AverageRating: avgRating,
           State: "New York",
           AccountAge: 0,
+          payoutSum
         };
       },
     },

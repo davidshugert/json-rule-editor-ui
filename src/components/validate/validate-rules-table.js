@@ -9,6 +9,11 @@ import Loader from "../loader/loader";
 import { ViewOutcomes } from "../attributes/view-attributes";
 import DataTable from "react-data-table-component";
 
+const formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
 class ValidateRulesTable extends Component {
   constructor(props) {
     super(props);
@@ -67,6 +72,7 @@ class ValidateRulesTable extends Component {
     console.log(facts, data);
     validateRuleset(facts, decisions)
       .then((outcomes) => {
+        console.log({outcomes})
         this.setState({
           loading: false,
           outcomes,
@@ -98,11 +104,11 @@ class ValidateRulesTable extends Component {
     } = this.state;
     const { attributes, index, ruleset } = this.props;
     const table = ruleset.table[index];
-    const {metadata, columns, data, generateFacts} = table;
-    console.log(table)
+    const {metadata, columns, data, generateFacts, generatePayout} = table;
 
     let message;
     let aggregateMessage;
+    let payoutMessage;
     if (result) {
       const aggText=JSON.stringify(facts, null, '\t');
       aggregateMessage = (
@@ -113,6 +119,15 @@ class ValidateRulesTable extends Component {
         })}</div>
         </div>
       );
+        payoutMessage= (
+          <div className="flex flex-col">
+            <div className="text-xl font-bold">Payout</div>
+            <div>{generatePayout(facts, outcomes).split("\n").map((i,key) => {
+              return <div key={key}>{i}</div>;
+          })}</div>
+          </div>
+        );
+
       if (error) {
         message = (
           <div className="form-error">
@@ -163,7 +178,8 @@ class ValidateRulesTable extends Component {
         {!loading && (
           <div className="flex flex-row justify-around">
             <div>{aggregateMessage}</div>
-            <div>{message}</div>
+            {/* <div>{message}</div> */}
+            <div>{payoutMessage}</div>
           </div>
         )}
       </React.Fragment>
