@@ -379,9 +379,12 @@ class AddDecision extends Component {
                 <div className="add-rulecase-wrapper">
                     {this.addPanel()}
                     {this.state.formError && <p className="form-error"> {this.state.formError}</p>}
-                    <div className="btn-group">
+                    <div className="btn-group flex ">
                         <Button label={buttonProps.primaryLabel} onConfirm={this.handleAdd} classname="primary-btn" type="submit" />
+                        <div style={{marginTop:'-20px', marginLeft:'1vw'}}>
+
                         <Button label={buttonProps.secondaryLabel} onConfirm={this.handleCancel} classname="cancel-btn"/>
+                        </div>
                     </div>
                     
                 </div>

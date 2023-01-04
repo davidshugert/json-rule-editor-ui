@@ -11,7 +11,7 @@ const Search = ({onChange}) => {
     };
 
     return (<div className="search-container">
-        <input type="text" onChange={handleSearch} className="search-field" value={search} placeholder="Search using name or type" />
+        <input type="text" onChange={handleSearch} className="search-field pl-2" value={search} placeholder="Search using name or type" />
     </div>);
 };
 

@@ -20,7 +20,6 @@ const tabs = [
   { name: "Facts" },
   { name: "Decisions" },
   { name: "Validate" },
-  { name: "Generate" },
 ];
 const ValdiateContainer = ({ table, attributes, decisions, ruleset }) => {
 
