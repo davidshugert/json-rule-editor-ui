@@ -54,11 +54,46 @@ const generatePayout = (facts, outcomes)=>{
     const bon = bonus?.params?.bonus || 0;
     sumBonus += bon;
     return `
-    - ${bonus.type} amount: ${formatter.format(bon)}`
+    * ${bonus.type} amount: ${formatter.format(bon)}`
   })}
   Total Payout: ${formatter.format(sumBonus+facts.payoutSum)}
   `
 }
+const columns =  [
+  {
+    name: "Driver Id",
+    selector: (row) => row.driverId,
+    width: "100px",
+  },
+  {
+    name: "Timestamp",
+    selector: (row) => row.timestamp,
+    width: "200px",
+  },
+  {
+    name: "Trip Id",
+    selector: (row) => row.id,
+    width: "150px",
+  },
+  {
+    name: "Rating",
+    selector: (row) => row.rating,
+  },
+  {
+    name: "Trip Price",
+    selector: (row) => row.price,
+  },
+  {
+    name: "Coordinates",
+    selector: (row) => row.coordinates,
+    width: "180px",
+  },
+  {
+    name: "IP",
+    selector: (row) => row.ip,
+    width: "150px",
+  },
+];
 export default {
   name: "Car",
   attributes: [
@@ -180,42 +215,8 @@ export default {
   ],
   table: [
     {
-      title: "Transactions Table",
       metadata: "Driver Id: 1 Driver Since: 2016 Driver State: Arizona",
-      columns: [
-        {
-          name: "Driver Id",
-          selector: (row) => row.driverId,
-        },
-        {
-          name: "Timestamp",
-          selector: (row) => row.timestamp,
-          width: "200px",
-        },
-        {
-          name: "Trip Id",
-          selector: (row) => row.id,
-          width: "100px",
-        },
-        {
-          name: "Rating",
-          selector: (row) => row.rating,
-        },
-        {
-          name: "Trip Price",
-          selector: (row) => row.price,
-        },
-        {
-          name: "Coordinates",
-          selector: (row) => row.coordinates,
-          width: "180px",
-        },
-        {
-          name: "IP",
-          selector: (row) => row.ip,
-          width: "150px",
-        },
-      ],
+      columns,
       data: [
         {
           timestamp: formatDate(
@@ -291,42 +292,8 @@ export default {
       },
     },
     {
-      title: "Transactions Table",
       metadata: "Driver Id: 2 Driver Since: 2022 Driver State: New York",
-      columns: [
-        {
-          name: "Driver Id",
-          selector: (row) => row.driverId,
-        },
-        {
-          name: "Timestamp",
-          selector: (row) => row.timestamp,
-          width: "200px",
-        },
-        {
-          name: "Trip Id",
-          selector: (row) => row.id,
-          width: "100px",
-        },
-        {
-          name: "Rating",
-          selector: (row) => row.rating,
-        },
-        {
-          name: "Trip Price",
-          selector: (row) => row.price,
-        },
-        {
-          name: "Coordinates",
-          selector: (row) => row.coordinates,
-          width: "180px",
-        },
-        {
-          name: "IP",
-          selector: (row) => row.ip,
-          width: "150px",
-        },
-      ],
+      columns,
       data: [
         {
           timestamp: formatDate(
@@ -387,7 +354,7 @@ export default {
       generatePayout,
       generateFacts: (data) => {
         const ratings = data.map((d) => Number(d.rating));
-        const prices = data.map((d) => Number(d.price));
+        const prices = data.map((d) => Number(d.price.slice(1)));
         const avgRating =
           ratings.reduce((acc, c) => acc + c, 0) / ratings.length;
         const payoutSum = prices.reduce((partialSum, a) => partialSum + a, 0);
