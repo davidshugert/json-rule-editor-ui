@@ -14,7 +14,7 @@ const Title = (props) => {
 )};
 
 Title.defaultProps = {
-  title: 'JuicePay Rule Validator',
+  title: 'Payout Automation',
 };
 
 Title.propTypes = {
