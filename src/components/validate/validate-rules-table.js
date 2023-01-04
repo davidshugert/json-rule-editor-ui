@@ -9,11 +9,6 @@ import Loader from "../loader/loader";
 import { ViewOutcomes } from "../attributes/view-attributes";
 import DataTable from "react-data-table-component";
 
-const formatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
-
 class ValidateRulesTable extends Component {
   constructor(props) {
     super(props);
@@ -64,15 +59,15 @@ class ValidateRulesTable extends Component {
 
   validateRules(e) {
     e.preventDefault();
-    const { decisions,ruleset, index } = this.props;
+    const { decisions, ruleset, index } = this.props;
     const table = ruleset.table[index];
-    const {data, generateFacts} = table;
+    const { data, generateFacts } = table;
     let facts = generateFacts(data);
     this.setState({ loading: true });
     console.log(facts, data);
     validateRuleset(facts, decisions)
       .then((outcomes) => {
-        console.log({outcomes})
+        console.log({ outcomes });
         this.setState({
           loading: false,
           outcomes,
@@ -93,40 +88,39 @@ class ValidateRulesTable extends Component {
   }
 
   attributeItems = () => {
-    const {
-      conditions,
-      loading,
-      outcomes,
-      result,
-      error,
-      errorMessage,
-      facts,
-    } = this.state;
-    const { attributes, index, ruleset } = this.props;
+    const { loading, outcomes, result, error, errorMessage, facts } =
+      this.state;
+    const { index, ruleset } = this.props;
     const table = ruleset.table[index];
-    const {metadata, columns, data, generateFacts, generatePayout} = table;
+    const { metadata, columns, data, generatePayout } = table;
 
     let message;
     let aggregateMessage;
     let payoutMessage;
     if (result) {
-      const aggText=JSON.stringify(facts, null, '\t');
+      const aggText = JSON.stringify(facts, null, "\t");
       aggregateMessage = (
         <div className="flex flex-col">
           <div className="text-xl font-bold">Aggregation Result</div>
-          <div>{aggText.split("\n").map((i,key) => {
-            return <div key={key}>{i}</div>;
-        })}</div>
+          <div>
+            {aggText.split("\n").map((i, key) => {
+              return <div key={key}>{i}</div>;
+            })}
+          </div>
         </div>
       );
-        payoutMessage= (
-          <div className="flex flex-col">
-            <div className="text-xl font-bold">Payout</div>
-            <div>{generatePayout(facts, outcomes).split("\n").map((i,key) => {
-              return <div key={key}>{i}</div>;
-          })}</div>
+      payoutMessage = (
+        <div className="flex flex-col">
+          <div className="text-xl font-bold">Payout</div>
+          <div>
+            {generatePayout(facts, outcomes)
+              .split("\n")
+              .map((i, key) => {
+                return <div key={key}>{i}</div>;
+              })}
           </div>
-        );
+        </div>
+      );
 
       if (error) {
         message = (

@@ -45,7 +45,6 @@ function formatDate(date) {
 }
 
 const generatePayout = (facts, outcomes)=>{
-  console.log({facts, outcomes})
   let sumBonus = 0;
   return `
   Drives Payout: ${formatter.format(facts.payoutSum)}

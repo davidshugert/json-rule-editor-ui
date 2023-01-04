@@ -19,7 +19,11 @@ import ApperanceContext from "../../context/apperance-context";
 import { CarRental } from "../../RuleSets";
 
 const options = [
-  { value: "Car", label: "Car Mobility Service (Lyft)", ruleSet: CarRental },
+  {
+    value: "Car Mobility Service (Lyft)",
+    label: "Car Mobility Service (Lyft)",
+    ruleSet: CarRental,
+  },
   { value: "Car Rental", label: "(Pending) Car Rental", ruleSet: CarRental },
   { value: "Insurance", label: "(Pending) Insurance", ruleSet: CarRental },
 ];
@@ -195,7 +199,7 @@ class HomeContainer extends Component {
               }}
             />
             <div className="flex flex-row-reverse h-12">
-              <div style={{marginTop:'-12px'}}>
+              <div style={{ marginTop: "-12px" }}>
                 <Button
                   label={"Go"}
                   onConfirm={() => this.navigate("./ruleset")}
