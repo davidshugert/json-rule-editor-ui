@@ -94,7 +94,7 @@ const columns =  [
   },
 ];
 export default {
-  name: "Car Rental Service",
+  name: "Car Mobility Service (Lyft)",
   attributes: [
     {
       name: "DrivesPerWeek",

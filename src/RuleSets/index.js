@@ -1,4 +1,3 @@
-import CarRental from './CarRental.js'
-export {
-CarRental
-}
+import CarRental from "./CarRental.js";
+import Lyft from "./Lyft";
+export { CarRental, Lyft };

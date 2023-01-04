@@ -16,13 +16,13 @@ import {
   RULE_UPLOAD_ERROR,
 } from "../../constants/messages";
 import ApperanceContext from "../../context/apperance-context";
-import { CarRental } from "../../RuleSets";
+import { CarRental, Lyft } from "../../RuleSets";
 
 const options = [
   {
     value: "Car Mobility Service (Lyft)",
     label: "Car Mobility Service (Lyft)",
-    ruleSet: CarRental,
+    ruleSet: Lyft,
   },
   { value: "Car Rental", label: "(Pending) Car Rental", ruleSet: CarRental },
   { value: "Insurance", label: "(Pending) Insurance", ruleSet: CarRental },
