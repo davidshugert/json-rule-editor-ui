@@ -139,7 +139,7 @@ class ValidateRulesTable extends Component {
     }
     return (
       <React.Fragment>
-        <div className="font-extrabold">Example {1 + index}</div>
+        <div className="font-extrabold text-2xl">Example {1 + index}</div>
         <DataTable
           columns={columns}
           data={data}
@@ -147,7 +147,7 @@ class ValidateRulesTable extends Component {
           fixedHeaderScrollHeight="300px"
         />
         <div>
-          <p className="text-3xl font-bold">Metadata</p>
+          <p className="text-xl font-bold">Metadata</p>
           <p>{metadata}</p>
         </div>
         <div className="btn-group my-2">
