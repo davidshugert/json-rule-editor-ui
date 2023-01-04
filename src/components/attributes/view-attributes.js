@@ -30,9 +30,6 @@ export const ViewOutcomes = ({items}) => {
     return (items.map((item, ind) => 
             (<div key={ind} className="view-attribute">
                 <div>
-                    Type
-                </div>
-                <div>
                     {item.type}
                 </div>
             </div>))

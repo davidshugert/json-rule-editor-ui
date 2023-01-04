@@ -125,7 +125,6 @@ td.attributes-header {
 }
 
 .view-attribute {
-    border-bottom: 2px solid #ddd;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -134,5 +133,4 @@ td.attributes-header {
 
 .view-params-container {
     width: 40%;
-    color: $dark-color;
 }

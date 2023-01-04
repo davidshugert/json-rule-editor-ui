@@ -4,7 +4,6 @@ import { updateState } from './app';
 
 
 export const uploadRuleset = (ruleset)  => (dispatch) => {
-    dispatch(updateState('open'));
     return dispatch({
         type: ActionTypes.UPLOAD_RULESET,
         payload: { ruleset }

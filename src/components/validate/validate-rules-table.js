@@ -1,17 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Panel from "../panel/panel";
-import InputField from "../forms/input-field";
-import SelectField from "../forms/selectmenu-field";
 import Button from "../button/button";
-import Table from "../table/table";
 import Banner from "../panel/banner";
 import * as Message from "../../constants/messages";
 import { validateRuleset } from "../../validations/rule-validation";
 import Loader from "../loader/loader";
 import { ViewOutcomes } from "../attributes/view-attributes";
+import DataTable from "react-data-table-component";
 
-class ValidateRules extends Component {
+class ValidateRulesTable extends Component {
   constructor(props) {
     super(props);
     const conditions = props.attributes.filter(
@@ -24,6 +22,7 @@ class ValidateRules extends Component {
       loading: false,
       outcomes: [],
       error: false,
+      facts: null,
     };
     this.handleAttribute = this.handleAttribute.bind(this);
     this.handleValue = this.handleValue.bind(this);
@@ -60,20 +59,12 @@ class ValidateRules extends Component {
 
   validateRules(e) {
     e.preventDefault();
-    let facts = {};
-    const { decisions, attributes } = this.props;
+    const { decisions,ruleset, index } = this.props;
+    const table = ruleset.table[index];
+    const {data, generateFacts} = table;
+    let facts = generateFacts(data);
     this.setState({ loading: true });
-    this.state.conditions.forEach((condition) => {
-      const attrProps = attributes.find((attr) => attr.name === condition.name);
-      if (attrProps.type === "number") {
-        facts[condition.name] = Number(condition.value);
-      } else if (condition.value && condition.value.indexOf(",") > -1) {
-        facts[condition.name] = condition.value.split(",");
-      } else {
-        facts[condition.name] = condition.value;
-      }
-    });
-    console.log({facts})
+    console.log(facts, data);
     validateRuleset(facts, decisions)
       .then((outcomes) => {
         this.setState({
@@ -82,6 +73,7 @@ class ValidateRules extends Component {
           result: true,
           error: false,
           errorMessage: "",
+          facts,
         });
       })
       .catch((e) => {
@@ -95,34 +87,32 @@ class ValidateRules extends Component {
   }
 
   attributeItems = () => {
-    const { conditions, loading, outcomes, result, error, errorMessage } =
-      this.state;
-    const { attributes } = this.props;
-    const options = attributes.map((att) => att.name);
-
-    const formElements = conditions.map((condition, index) => (
-      <tr key={condition.name + index || "item" + index}>
-        <td>
-          <SelectField
-            options={options}
-            onChange={(e) => this.handleAttribute(e, index)}
-            value={condition.name}
-            readOnly
-          />
-        </td>
-        <td colSpan="2">
-          {
-            <InputField
-              onChange={(e) => this.handleValue(e, index)}
-              value={condition.value}
-            />
-          }
-        </td>
-      </tr>
-    ));
+    const {
+      conditions,
+      loading,
+      outcomes,
+      result,
+      error,
+      errorMessage,
+      facts,
+    } = this.state;
+    const { attributes, index, ruleset } = this.props;
+    const table = ruleset.table[index];
+    const {metadata, columns, data, generateFacts} = table;
+    console.log(table)
 
     let message;
+    let aggregateMessage;
     if (result) {
+      const aggText=JSON.stringify(facts, null, '\t');
+      aggregateMessage = (
+        <div className="flex flex-col">
+          <div className="text-xl font-bold">Aggregation Result</div>
+          <div>{aggText.split("\n").map((i,key) => {
+            return <div key={key}>{i}</div>;
+        })}</div>
+        </div>
+      );
       if (error) {
         message = (
           <div className="form-error">
@@ -130,11 +120,16 @@ class ValidateRules extends Component {
           </div>
         );
       } else if (outcomes && outcomes.length < 1) {
-        message = <div>No outcomes found. Validation data did not match with any payout event. </div>;
+        message = (
+          <div>
+            No outcomes found. Validation data did not match with any payout
+            event.{" "}
+          </div>
+        );
       } else if (outcomes && outcomes.length > 0) {
         message = (
           <div className="view-params-container my-2">
-            <h4 className="font-bold">Outcomes </h4>
+            <h4 className="text-xl font-bold">Outcomes</h4>
             <ViewOutcomes items={outcomes} />
           </div>
         );
@@ -144,8 +139,17 @@ class ValidateRules extends Component {
     }
     return (
       <React.Fragment>
-        <div className="font-extrabold">Custom Validation</div>
-        <Table columns={["Name", "Value"]}>{formElements}</Table>
+        <div className="font-extrabold">Example {1 + index}</div>
+        <DataTable
+          columns={columns}
+          data={data}
+          fixedHeader
+          fixedHeaderScrollHeight="300px"
+        />
+        <div>
+          <p className="text-3xl font-bold">Metadata</p>
+          <p>{metadata}</p>
+        </div>
         <div className="btn-group my-2">
           <Button
             label={"Validate Ruleset"}
@@ -156,7 +160,12 @@ class ValidateRules extends Component {
         </div>
         <hr />
         {loading && <Loader />}
-        {!loading && message}
+        {!loading && (
+          <div className="flex flex-row justify-around">
+            <div>{aggregateMessage}</div>
+            <div>{message}</div>
+          </div>
+        )}
       </React.Fragment>
     );
   };
@@ -181,14 +190,19 @@ class ValidateRules extends Component {
   }
 }
 
-ValidateRules.defaultProps = {
+ValidateRulesTable.defaultProps = {
   attributes: [],
   decisions: [],
+  ruleset: {},
+  index: 0,
 };
 
-ValidateRules.propTypes = {
+ValidateRulesTable.propTypes = {
   attributes: PropTypes.array,
   decisions: PropTypes.array,
+  ruleset: PropTypes.object,
+  index: PropTypes.number,
+  table: PropTypes.object,
 };
 
-export default ValidateRules;
+export default ValidateRulesTable;
